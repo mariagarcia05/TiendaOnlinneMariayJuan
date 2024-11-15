@@ -1,12 +1,18 @@
+
 <?php
 //require "../Modelo/DTOProducto.php";
 
 require "../Controlador/ControlProductos.php";
+require "../Modelo/DTOUsuario.php";
 session_start();
 $control = new ControlProductos();
 $arrayProductos = $control->cogerProductos();
 if (!isset($_SESSION["carrito"])){
     $_SESSION["carrito"] = [];
+}
+if (!isset($_SESSION["usuario"])){
+    $aviso="no se ha iniciado sesion";
+    header("location:inicio.php?mensaje=$aviso");
 }
 ?>
 <!DOCTYPE html>
@@ -23,6 +29,7 @@ if (!isset($_SESSION["carrito"])){
 <body>
 <header>
     <h1>Tienda de Informática</h1>
+    <p><?php print 'bienvenido ' . $_SESSION["usuario"]->getUsuario(); ?></p>
     <nav>
         <ul>
             <li><a href="carritoMenu.php">Carrito</a></li>
@@ -31,12 +38,12 @@ if (!isset($_SESSION["carrito"])){
     </nav>
 </header>
 <div class="container">
-<form action="../Controlador/ControlCarrito.php" method="post">
-    <table>
-        <?php
-        $mitad = count($arrayProductos)/2;
-        $total = count($arrayProductos)-$mitad;
-        $contador=0;
+    <form action="../Controlador/ControlCarrito.php" method="post">
+        <table>
+            <?php
+            $mitad = count($arrayProductos)/2;
+            $total = count($arrayProductos)-$mitad;
+            $contador=0;
 
             print "<tr>";
             for ($i=0; $i < $total; $i++) {
@@ -60,9 +67,9 @@ if (!isset($_SESSION["carrito"])){
             print "</tr>";
 
 
-        ?>
-    </table>
-</form>
+            ?>
+        </table>
+    </form>
 </div>
 <footer>
     <p>&copy; 2024 Tienda de Informática. Todos los derechos reservados.</p>
